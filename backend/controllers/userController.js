@@ -48,10 +48,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    // Generate a JWT token
-    const token = jwt.sign({ userId: user._id }, 'your-secret-key', { expiresIn: '1h' });
-
-    res.status(200).json({ token, userId: user._id });
+    res.status(200).json({ userId: user._id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

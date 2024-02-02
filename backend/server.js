@@ -1,9 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const userRoutes = require('./routes/users');
-const eventRoutes = require('./routes/events'); // Import event routes
-
+const eventRoutes = require('./routes/events');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,11 +19,11 @@ db.once('open', () => {
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/events', eventRoutes); 
-// Your other routes and middleware go here
+app.use('/api/events', eventRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

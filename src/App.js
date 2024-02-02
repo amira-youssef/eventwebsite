@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
-function App() {
+const App = () => {
+  const handleLogin = (userId) => {
+    // Handle successful login, e.g., redirect to another screen
+    console.log('User logged in with ID:', userId);
+  };
+
+  const handleRegister = (message) => {
+    // Handle successful registration, e.g., show a success message
+    console.log('Registration successful:', message);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
+        <Route path="/register" element={<RegisterScreen onRegister={handleRegister} />} />
+        {/* Add additional routes/screens as needed */}
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
