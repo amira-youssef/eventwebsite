@@ -19,11 +19,28 @@ db.once('open', () => {
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+
+// CORS setup
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with your frontend's URL
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // specify the allowed HTTP methods
+  optionsSuccessStatus: 204, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+// Enable CORS with options
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
+
+// Error handling for CORS
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

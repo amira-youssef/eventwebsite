@@ -15,8 +15,7 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  // You can add more fields as needed
+  
 });
 
 const Event = mongoose.model('Event', eventSchema);
