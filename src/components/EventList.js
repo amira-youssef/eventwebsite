@@ -26,7 +26,6 @@ const EventList = () => {
 
   return (
     <div>
-      <h1>Event List</h1>
       <ul>
         {events.map((event) => (
           <li key={event._id}>

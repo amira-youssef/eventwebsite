@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/users');
 const eventRoutes = require('./routes/events');
+const registerRoutes = require('./routes/registrations')
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +35,7 @@ app.use(cors(corsOptions));
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/register', registerRoutes);
 
 // Error handling for CORS
 app.use((err, req, res, next) => {

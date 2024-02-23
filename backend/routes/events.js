@@ -5,10 +5,10 @@ const Event = require('../models/Event');
 // Controller to create a new event
 const createEvent = async (req, res) => {
   try {
-    const { title, description, date, createdBy } = req.body;
+    const { title, description, date, user } = req.body;
 
     // Check if createdBy is provided, if not, handle it accordingly
-    if (!createdBy) {
+    if (!user) {
       return res.status(400).json({ message: 'User information is required to create an event' });
     }
 
@@ -16,7 +16,7 @@ const createEvent = async (req, res) => {
       title,
       description,
       date,
-      createdBy,
+      user,
     });
 
     const savedEvent = await event.save();
@@ -63,6 +63,28 @@ const getAllEvents = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+// Delete an event by ID
+router.delete('/events/:eventId', async (req, res) => {
+  const eventId = req.params.eventId;
+
+  try {
+    // Find the event by ID and delete it
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+    console.log(deletedEvent);
+    if (deletedEvent) {
+      res.status(200).json({ message: 'Event deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Event not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+
 
 // Routes
 router.post('/create', createEvent);

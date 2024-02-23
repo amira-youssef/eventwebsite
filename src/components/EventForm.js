@@ -10,14 +10,17 @@ const EventForm = ({ onCreateEvent }) => {
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
-
+  
     try {
+      const userData = JSON.parse(localStorage.getItem('currentUser'));
+      console.log(userData.userId);
       const response = await axios.post(
         'http://localhost:5000/api/events/create',
         {
           title,
           description,
           date,
+          user: userData.userId, // Include user ID in the request
         },
         {
           withCredentials: true,

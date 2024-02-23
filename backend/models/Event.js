@@ -15,7 +15,10 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  
+  user: {
+    type: String,
+    required: true,
+  }
 });
 
 const Event = mongoose.model('Event', eventSchema);

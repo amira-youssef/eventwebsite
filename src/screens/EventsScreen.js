@@ -6,6 +6,7 @@ const EventsScreen = () => {
 
   return (
     <div>
+      
       <h2>Event Dashboard</h2>
       <hr />
       <EventList />

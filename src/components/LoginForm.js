@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,10 +10,24 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
-      onLogin(response.data.userId);
+      const response = await axios.post(
+        'http://localhost:5000/api/users/login',
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log('Login successful:', response.data);
+      localStorage.setItem('currentUser', JSON.stringify(response.data));
+      // Redirect to the event list page after successful login
+      //window.location.href = '/events';
+      console.log(response)
     } catch (error) {
-      console.error('Login error:', error.response.data.message);
+      console.error('Login error:', error.response?.data?.message);
       // Handle login error (display message, etc.)
     }
   };
@@ -22,12 +36,22 @@ const LoginForm = ({ onLogin }) => {
     <Form onSubmit={handleLogin}>
       <Form.Group controlId="formEmail">
         <Form.Label>Email:</Form.Label>
-        <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <Form.Control
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
       </Form.Group>
 
       <Form.Group controlId="formPassword">
         <Form.Label>Password:</Form.Label>
-        <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <Form.Control
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
       </Form.Group>
 
       <Button variant="primary" type="submit">
