@@ -22,10 +22,19 @@ const LoginForm = () => {
       );
 
       console.log('Login successful:', response.data);
+
+      // Set isLoggedIn to true and store it in local storage
+      localStorage.setItem('isLoggedIn', true);
+      // Store user data in local storage
       localStorage.setItem('currentUser', JSON.stringify(response.data));
-      // Redirect to the event list page after successful login
-      //window.location.href = '/events';
-      console.log(response)
+
+      // Redirect based on isAdmin status
+      const isAdmin = response.data.isAdmin;
+      if (isAdmin) {
+        window.location.href = '/admin';
+      } else {
+        window.location.href = '/events';
+      }
     } catch (error) {
       console.error('Login error:', error.response?.data?.message);
       // Handle login error (display message, etc.)
@@ -33,31 +42,34 @@ const LoginForm = () => {
   };
 
   return (
-    <Form onSubmit={handleLogin}>
-      <Form.Group controlId="formEmail">
-        <Form.Label>Email:</Form.Label>
-        <Form.Control
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </Form.Group>
+    <div className="d-flex justify-content-center align-items-center h-100">
+      <Form onSubmit={handleLogin} className="w-50">
+      <h2 className="text-center mb-4">Login</h2>
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email:</Form.Label>
+          <Form.Control
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </Form.Group>
 
-      <Form.Group controlId="formPassword">
-        <Form.Label>Password:</Form.Label>
-        <Form.Control
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </Form.Group>
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password:</Form.Label>
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </Form.Group>
 
-      <Button variant="primary" type="submit">
-        Login
-      </Button>
-    </Form>
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
+    </div>
   );
 };
 

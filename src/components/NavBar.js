@@ -1,14 +1,14 @@
-// Navbar.js
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const currentUser = localStorage.getItem('currentUser') ;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const logout = () => {
     // Clear user's login status from local storage
     localStorage.removeItem('currentUser');
-    // Perform any other necessary cleanup, such as redirecting to the login page
+    localStorage.setItem('isLoggedIn', false);
+    // Reload the page to show the login page
+    window.location.reload();
   };
 
   return (
@@ -26,17 +26,23 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/createE">Create Event</Link>
             </li>
+          </ul>
+          <ul className="navbar-nav ml-auto">
             {currentUser ? (
               <li className="nav-item">
-                          <button className="btn btn-outline-primary" onClick={logout}>Logout</button>
-
+                <Link className="nav-link" to="/user">User Dashboard</Link>
               </li>
-            )  : (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/login">Login</Link>
-                </li>
-              )}
-            </ul>  
+            ) : (
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">Login</Link>
+              </li>
+            )}
+            {currentUser && (
+              <li className="nav-item">
+                <button className="nav-link btn btn-link" onClick={logout}>Logout</button>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </nav>

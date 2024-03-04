@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, Button } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
+import UpdateEventModal from '../components/UpdateEventModal';
+import Sidebar from '../components/Sidebar';
 
 const ManageEventsScreen = () => {
   const [events, setEvents] = useState([]);
@@ -18,34 +20,59 @@ const ManageEventsScreen = () => {
       });
   }, []);
 
-
-  const handleDeleteEvent = async (eventId) => {
+  const handleDelete = async (eventId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/events/${eventId}`);
+      // Send a DELETE request to delete the event
+      await axios.delete(`http://localhost:5000/api/events/events/${eventId}`);
+      // Update the events state or any other necessary action
       setEvents(events.filter(event => event._id !== eventId));
     } catch (error) {
       console.error('Error deleting event:', error);
+      // Handle errors
     }
   };
 
+  
+
   return (
-    <div>
-      <h2>Manage Events</h2>
-      <div className="row">
-        {events.map(event => (
-          <div className="col-md-4 mb-4" key={event._id}>
-            <Card>
-              <Card.Body>
-                <Card.Title>{event.title}</Card.Title>
-                <Card.Text>{event.description}</Card.Text>
-                <Card.Text>Date: {event.date}</Card.Text>
-                <Button variant="danger" onClick={() => handleDeleteEvent(event._id)}>Delete</Button>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
+    <div className="container-fluid">
+    <div className="row">
+      <Sidebar />
+      <main role="main" className="col-md-9 ml-sm-auto col-10-10 px-4">
+        <div className="d-flex justify-content-between flex-wrap flex-justify-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 className="h2">Manage Registrations</h1>
+        </div>
+        <div className="table-responsive">
+          <table className="table table-striped table-sm"> 
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map(event => (
+                <tr key={event._id}>
+                  <td>{event.title}</td>
+                  <td>{event.description}</td>
+                  <td>{event.date}</td>
+                  <td>
+                    <Button variant="danger" onClick={() => handleDelete(event._id)}>Delete</Button>
+                    <UpdateEventModal eventId={event._id} />
+                  </td>
+                </tr>
+              ))
+              }
+            </tbody>
+          </table>  
+        </div>  
+        <Button href='/admin'>Back to Dashboard</Button>
+        </main>
       </div>
     </div>
+    
   );
 };
 

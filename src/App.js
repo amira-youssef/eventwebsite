@@ -10,6 +10,7 @@ import AdminScreen from './screens/AdminScreen';
 import ManageRegistrationsScreen from './screens/ManageRegistrationsScreen';
 import ManageUsersScreen from './screens/ManageUsersScreen';
 import ManageEventsScreen from './screens/ManageEventsScreen';
+import UserD from './screens/UserD';
 
 const App = () => {
   const handleLogin = (userId) => {
@@ -25,7 +26,7 @@ const App = () => {
   return (
     <div className='App'>
     <Router>
-      <Navbar />
+    <Route path={["/login", "/register", "/events", "/createE", "/user"]} element={<Navbar />} />
       <Routes>
         <Route path="/" element={<HomePageScreen />} />
         <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
@@ -36,6 +37,7 @@ const App = () => {
         <Route path='/manageRegist' exact Component={ManageRegistrationsScreen}/>
         <Route path='/manageUsers' exact Component={ManageUsersScreen}/>
         <Route path='/manageEvents' exact Component={ManageEventsScreen}/>
+        <Route path='/user' exact Component={UserD}/>
 
         {/* Add additional routes/screens as needed */}
       </Routes>

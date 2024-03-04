@@ -3,7 +3,8 @@ const router = express.Router();
 const Event = require('../models/Event');
 
 // Controller to create a new event
-const createEvent = async (req, res) => {
+router.post('/create' ,async (req, res) => {
+
   try {
     const { title, description, date, user } = req.body;
 
@@ -26,10 +27,10 @@ const createEvent = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+});
 
 // Controller to update an existing event
-const updateEvent = async (req, res) => {
+router.put('/:eventId/update', async (req, res) => {
   try {
     const eventId = req.params.eventId;
 
@@ -51,10 +52,10 @@ const updateEvent = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+});
 
 // Controller to retrieve all events
-const getAllEvents = async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const events = await Event.find();
     res.json(events);
@@ -62,9 +63,9 @@ const getAllEvents = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+});
 
-// Delete an event by ID
+// Delete an event by EVENT ID
 router.delete('/events/:eventId', async (req, res) => {
   const eventId = req.params.eventId;
 
@@ -83,12 +84,35 @@ router.delete('/events/:eventId', async (req, res) => {
   }
 });
 
+router.get("/getEventById/:eventId", async (req, res) => {
+  const eventId = req.params.eventId; // Access eventId from the URL parameter
+  try {
+    const event = await Event.findOne({ _id: eventId });
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    res.json(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 
+router.get('/eventsByUserId/:userId', async (req, res) => {
+  const { userId } = req.params;
 
-// Routes
-router.post('/create', createEvent);
-router.put('/:eventId/update', updateEvent);
-router.get('/', getAllEvents);
+  try {
+    // Find all events where the user field matches the provided userId
+    const events = await Event.find({ user: userId });
+    
+    res.json(events);
+  } catch (error) {
+    console.error('Error fetching events by userID:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}); 
+
+
 
 module.exports = router;
